@@ -142,6 +142,11 @@ The trained model and preprocessing artifacts are stored in the `models/` direct
 **Sujal Goswami**
 
 GitHub: [@S-max-ops](https://github.com/S-max-ops)
+# 🏡 EstateIQ – House Price Prediction
+
+🚀 **Live Demo:** https://estateiq-house-price-prediction-afni8lkgarmwxj9nlgbeha.streamlit.app/
+
+💻 **GitHub Repository:** https://github.com/S-max-ops/EstateIQ-House-Price-Prediction
 
 ---
 
