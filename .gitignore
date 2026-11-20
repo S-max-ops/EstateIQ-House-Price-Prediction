@@ -1,0 +1,29 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Kaggle datasets
+Data/*.csv
+
+# Submission files
+submission.csv
+notebooks/submission.csv
+
+# Environment variables and secrets
+.env
+.env.*
+
+# VS Code
+.vscode/
+
+# Operating system
+.DS_Store
+Thumbs.db
