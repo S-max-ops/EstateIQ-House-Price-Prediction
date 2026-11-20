@@ -22,33 +22,34 @@ st.set_page_config(
 # =====================================================
 
 BASE_DIR = Path(__file__).resolve().parent
-MODEL_DIR = BASE_DIR / "models"
+
+# Model files are stored in the repository root
+MODEL_DIR = BASE_DIR
 
 
 @st.cache_resource
 def load_artifacts():
 
-    model = joblib.load(
-        MODEL_DIR / "xgboost_model.pkl"
-    )
+    model_path = MODEL_DIR / "xgboost_model.pkl"
+    preprocessor_path = MODEL_DIR / "preprocessor.pkl"
+    template_path = MODEL_DIR / "input_template.pkl"
 
-    preprocessor = joblib.load(
-        MODEL_DIR / "preprocessor.pkl"
-    )
-
-    input_template = joblib.load(
-        MODEL_DIR / "input_template.pkl"
-    )
+    model = joblib.load(model_path)
+    preprocessor = joblib.load(preprocessor_path)
+    input_template = joblib.load(template_path)
 
     return model, preprocessor, input_template
 
 
 try:
+
     model, preprocessor, input_template = load_artifacts()
+
     model_loaded = True
     model_error = None
 
 except Exception as e:
+
     model_loaded = False
     model_error = str(e)
 
@@ -129,8 +130,11 @@ st.sidebar.caption("Machine Learning Project")
 st.sidebar.caption("Model: XGBoost Regressor")
 
 if model_loaded:
+
     st.sidebar.success("Model Loaded Successfully")
+
 else:
+
     st.sidebar.error("Model Loading Failed")
 
 
@@ -197,10 +201,13 @@ if page == "Overview":
     col4.info("XGBoost")
 
     if model_loaded:
+
         st.success(
             "Your trained XGBoost model is ready."
         )
+
     else:
+
         st.error(
             f"Model error: {model_error}"
         )
@@ -333,7 +340,7 @@ elif page == "Price Prediction":
 
             try:
 
-                # Create a copy of the original input
+                # Copy saved input template
                 input_data = input_template.copy()
 
                 # Update user-provided features
@@ -353,7 +360,7 @@ elif page == "Price Prediction":
 
                 input_data.loc[:, "Neighborhood"] = neighborhood
 
-                # Keep living area and floor-area features consistent
+                # Update floor area features
                 input_data.loc[:, "1stFlrSF"] = living_area
 
                 input_data.loc[:, "2ndFlrSF"] = 0
@@ -382,24 +389,24 @@ elif page == "Price Prediction":
                     - input_data["YearRemodAdd"]
                 )
 
-                # Check expected input columns
+                # Validate input columns
                 if list(input_data.columns) != list(input_template.columns):
 
                     raise ValueError(
                         "Input features do not match the saved template."
                     )
 
-                # Transform using saved preprocessing pipeline
+                # Apply saved preprocessing
                 processed_data = preprocessor.transform(
                     input_data
                 )
 
-                # Predict using trained XGBoost model
+                # Generate prediction
                 prediction = model.predict(
                     processed_data
                 )[0]
 
-                # Display prediction
+                # Display result
                 st.markdown("---")
 
                 st.subheader(
@@ -421,9 +428,9 @@ elif page == "Price Prediction":
                 )
 
                 st.info(
-                    "Note: Some property characteristics not "
-                    "included in the form retain their default "
-                    "values from the saved training-data template."
+                    "Some property characteristics not included "
+                    "in the form retain their default values from "
+                    "the saved input template."
                 )
 
             except Exception as e:
